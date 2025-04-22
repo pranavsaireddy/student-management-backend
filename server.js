@@ -13,28 +13,31 @@ app.use(express.json());
 // Routes
 app.use('/students', studentRoutes);
 
-// Health check endpoint
+// Health check endpoint (required for Render)
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'OK' });
+  res.status(200).json({ status: 'ok' });
 });
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log('MongoDB connected');
     
+    // Critical Render-specific configuration
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on port ${PORT}`);
+    const HOST = '0.0.0.0'; // Required for Render
+    
+    app.listen(PORT, HOST, () => {
+      console.log(`Server running on http://${HOST}:${PORT}`);
+      console.log('Ready for Render port detection');
     });
   })
   .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1); // Exit if DB connection fails
+    console.error('MongoDB connection failed:', err);
+    process.exit(1); // Exit if DB fails
   });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+// Error handling
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection:', err);
 });
