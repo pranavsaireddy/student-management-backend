@@ -9,7 +9,7 @@ const app = express();
 // Enhanced CORS Configuration
 const corsOptions = {
   origin: [
-    "https://candid-gnome-f44a3a.netlify.app", // Removed /students from origin
+    "https://student-management-frontend-vwi4.onrender.com", // Removed /students from origin
     "http://localhost:3000" // For local development
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
