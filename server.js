@@ -6,6 +6,16 @@ const studentRoutes = require('./routes/studentRoutes');
 
 const app = express();
 
+const corsOptions = {
+  origin: [
+    "https://candid-gnome-f44a3a.netlify.app/students", // Your Netlify URL
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
 // Middleware
 app.use(cors());
 app.use(express.json());
